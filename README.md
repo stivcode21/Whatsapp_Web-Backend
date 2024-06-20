@@ -11,6 +11,8 @@ Project to clone the backend of WhatsApp.
 ## How to run
 1. Clone this repository `git clone`
 2. Install dependencies `npm install`
+3. Create a `.env` file with the following variables: PORT, DATABASE_URL, JWT_SECRET
+4. Run the project `npm start`
 
 ## Developers
 - [Mauricio Castañeda](https://github.com/mcastv)
