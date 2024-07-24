@@ -1,18 +1,12 @@
-const mongoose = require('mongoose')
-const config = require('../../../config')
+const mongoose = require("mongoose");
+const config = require("../../../config");
 
-const connect = async () => {
+async function DBConnect() {
   try {
-    await mongoose.connect(config.db.url, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    })
-    console.log('Connected to MongoDB')
+    await mongoose.connect(config.db.url);
+    console.log("Database connected!");
   } catch (error) {
-    console.error('Error connecting to MongoDB:', error.message)
-    process.exit(1)
+    console.log("DB: Error!" + error);
   }
 }
-
-module.exports = { connect }
-
+module.exports = DBConnect;
