@@ -16,7 +16,8 @@
     "express": "^4.19.2",
     "express-validator": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.4.3",
-    "nodemailer": "^6.9.14"
+    "mysql2": "^3.10.3",
+    "nodemailer": "^6.9.14",
+    "sequelize": "^6.37.3"
   }
 }
