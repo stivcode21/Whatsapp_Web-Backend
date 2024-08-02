@@ -1,21 +1,17 @@
-const { Sequelize } = require("sequelize")
+import { Sequelize } from "sequelize";
+import { DATABASE, USERNAME, PASSWORD, DB_PORT } from "../../../config.js";
 
+const sequelize = new Sequelize(DATABASE, USERNAME, PASSWORD, {
+  host: "localhost",
+  dialect: "postgres",
+  port: DB_PORT,
+})
 
-const connect = async () => {
+export default async function connectDB() {
   try {
-    const sequelize = new Sequelize(process.env.DB_DATABASE, process.env.DB_USERNAME, process.env.DB_PASSWORD ,{
-       dialect: "mysql",
-       host: process.env.DB_HOST,
-       logging: (...msg) => console.log(msg)
-    })
     await sequelize.authenticate()
-
-    await sequelize.sync({ force: true })
-    return sequelize;
+    console.log("Connected to DB successfully")
   } catch (error) {
-    console.error('Error connecting Mysql', error.message)
+    console.log(error)
   }
 }
-
-module.exports = { connect }
-

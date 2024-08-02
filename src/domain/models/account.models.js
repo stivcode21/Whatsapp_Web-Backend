@@ -1,16 +1,14 @@
-const { DataTypes, Model } = require("sequelize");
-const { connect } = require("../../infrastructure/database/connection")
+import { DataTypes, Model } from "sequelize"
+import connectDB from "../../infrastructure/database/connection"
 const { User } = require("./user.model")
 
 class Account extends Model {}
 
-Account.init({
-
-}, {
-    sequelize: connect(),
+Account.init({}, {
+    sequelize: connectDB(),
     tableName: "Cuentas"
 })
 
 Account.belongsTo(User)
 
-module.exports = { Account }
+export default Account
