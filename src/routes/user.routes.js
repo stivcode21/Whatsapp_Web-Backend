@@ -1,12 +1,14 @@
-const express = require('express')
-const UserController = require('../controllers/user.controller')
-const router = express.Router()
+import { Router } from "express"
+import UserController from "../controllers/user.controller"
 
+const userRouter = Router()
+const { 
+  index, 
+  validator_body, 
+  verify 
+} = new UserController()
 
-const UserClass = new UserController()
+userRouter.get("/user", index)
+userRouter.post("/user/verify", validator_body, verify)
 
-router.get("/user", UserClass.index)
-router.post("/user/verify", UserClass.validator_body ,UserClass.verify)
-
-
-module.exports = router
+export default userRouter

@@ -1,20 +1,11 @@
-require('dotenv').config()
-const express = require('express')
-const { connect } = require("./src/infrastructure/database/mongoose")
-const config = require('./config')
-const PORT = config.port || 3000;
-const routerUser = require("./src/routes/user.routes")
+import express from "express"
+import connectDB from "./db.js"
+import { PORT } from "./config.js"
 
 const app = express()
 
-
-app.use(express.json())
-//Router
-app.use(routerUser)
+connectDB()
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)
-  // connect()
 })
-
-module.exports = app

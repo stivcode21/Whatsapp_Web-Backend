@@ -5,8 +5,8 @@ Project to clone the backend of WhatsApp.
 - Node.js
 - Express
 - JWT
-- MongoDB
-- Mongoose
+- PostgreSQL
+- Sequelize
 
 ## How to run
 1. Clone this repository `git clone`
@@ -20,3 +20,4 @@ Project to clone the backend of WhatsApp.
 - [Jesús Sirit](https://github.com/jesus24-dev)
 - [Benjamin Morales](https://github.com/BenjaminJ10M)
 - [Alfredo Saavedra](https://github.com/teoisnotdead)
+- [Segura Mendoza Gael Alejandro](https://github.com/GaelSM)

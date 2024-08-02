@@ -7,14 +7,13 @@ class UserController {
     validator_body = [
         body("email").notEmpty().isEmail(),
         body("subject").isString(),
-        (req,res,next) => {
+        function (req,res,next) {
             try {
                 const result = validationResult(req)
                 if (result.isEmpty()) {
                    return next() 
                 }
                 return result.throw()
-                
             } catch (error) {
                 res.status(403)
                 res.send({
@@ -24,8 +23,6 @@ class UserController {
         }
     ]
 
-
-
     index(request, response) {
         response.send("database")
     }
@@ -33,7 +30,6 @@ class UserController {
     async verify(request, response) {
         const { email, subject } = request.body
 
-        
         //TODO Hacer una plantilla de mensaje
         const info = await config_mailler().sendMail({
             from: process.env.EMAIL_PROVEDOR,
@@ -48,4 +44,4 @@ class UserController {
     } 
 }
 
-module.exports = UserController
+export default UserController
