@@ -1,14 +1,10 @@
 import { Router } from "express"
-import UserController from "../controllers/user.controller"
+import UserController from "../controllers/user.controller.js"
 
 const userRouter = Router()
-const { 
-  index, 
-  validator_body, 
-  verify 
-} = new UserController()
 
-userRouter.get("/user", index)
-userRouter.post("/user/verify", validator_body, verify)
+userRouter.post("/register", UserController.register)
+/*userRouter.get("/create-profile", createProfile)
+userRouter.post("/verify", validator_body, verify)*/
 
 export default userRouter

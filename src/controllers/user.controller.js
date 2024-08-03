@@ -1,6 +1,9 @@
-const { config_mailler } = require("../helpers/nodemailler")
-const { body, validationResult } = require("express-validator")
-const { generate_token } = require('../helpers/funtctions')
+//const { config_mailler } = require("../helpers/nodemailler")
+import { body, validationResult } from "express-validator"
+import User from "../domain/models/user.model.js"
+import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
+//const { generate_token } = require('../helpers/funtctions')
 
 class UserController {
 
@@ -23,11 +26,42 @@ class UserController {
         }
     ]
 
-    index(request, response) {
-        response.send("database")
+    static async register(request, response) {
+        const { email, password } = request.body
+
+        try {
+            const user = await User.findOne({ where: { email }})
+
+            if(user) return response.status(400).json({
+                message: "Usuario existente"
+            })
+
+            const hashedPassword = await bcrypt.hash(password, 10)
+
+            const createdUser = await User.create({ 
+                email, 
+                password: hashedPassword, 
+                isNew: true
+            })
+
+            const token = jwt.sign({ id: createdUser.id }, "Secreto", {
+                expiresIn: "1h"
+            })
+
+            response.cookie("token", token, { httpOnly: true }).json({
+                id: createdUser.id,
+                isNew: true
+            })
+        } catch (error) {
+            console.log(error)
+        }
     }
 
-    async verify(request, response) {
+    async createProfile(request, response) {
+        
+    }
+
+    /*async verify(request, response) {
         const { email, subject } = request.body
 
         //TODO Hacer una plantilla de mensaje
@@ -41,7 +75,7 @@ class UserController {
        console.log(generate_token(4));
         return response.send({email, subject});
 
-    } 
+    } */
 }
 
 export default UserController
