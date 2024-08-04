@@ -48,7 +48,7 @@ class UserController {
                 expiresIn: "1h"
             })
 
-            response.cookie("token", token, { httpOnly: true }).json({
+            response.cookie("token", token).json({
                 id: createdUser.id,
                 isNew: true
             })
@@ -57,8 +57,34 @@ class UserController {
         }
     }
 
-    async createProfile(request, response) {
+    static async verifyToken(request, response) {
+        const cookie = request.cookies.token
         
+        const { id } = jwt.verify(cookie, "Secreto")
+
+        console.log(id)
+
+        if(!id) return res.status(400).json({
+            message: "No autorizado"
+        })
+
+        try {
+            const user = await User.findOne({ where: { id } })
+
+            if(!user) return response.status(404).json({
+                message: "Usuario no encontrado"
+            })
+
+            return response.status(200).json({
+                user
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    static async createProfile(request, response) {
+        console.log(request.body)
     }
 
     /*async verify(request, response) {
