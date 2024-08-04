@@ -32,6 +32,9 @@ User.init({
     image: {
         type: DataTypes.BLOB
     },
+    description: {
+        type: DataTypes.STRING
+    },
     isNew: {
         type: DataTypes.BOOLEAN
     }

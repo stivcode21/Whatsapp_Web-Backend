@@ -8,6 +8,13 @@ const generate_token = (time) => {
     return code_verify;
 }
 
-module.exports = { 
-    generate_token
+export async function formatUser(user) {
+    return {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        image: user.image,
+        description: user.description,
+        isNew: user.isNew
+    }
 }

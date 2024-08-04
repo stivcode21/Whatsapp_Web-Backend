@@ -22,7 +22,7 @@ app.use("/user", userRouter)
 connectDB()
 
 try {
-  await User.sync({ force: true })
+  await User.sync()
   console.log("Table Users created")
 } catch (error) {
   console.log(error)
