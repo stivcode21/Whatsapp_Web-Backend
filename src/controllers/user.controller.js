@@ -55,18 +55,49 @@ class UserController {
     }
   }
 
+  static async login(request, response) {
+    const { email, password } = request.body
+
+    try {
+      const user = await User.findOne({ where: { email }})
+
+      if(!user) return response.status(404).json({
+        message: "Usuario no existente"
+      })
+
+      const isPasswordCorrect = await bcrypt.compare(password, user.password)
+
+      if(!isPasswordCorrect) return response.status(401).json({
+        message: "Usuario o contraseña incorrectos"
+      })
+
+      const token = jwt.sign({ id: user.id }, "Secreto", {
+        expiresIn: "1h"
+      })
+
+      response.cookie("token", token).status(200).json(formatUser(user))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   static async verifyToken(request, response) {
     const cookie = request.cookies.token
 
-    const { id } = jwt.verify(cookie, "Secreto")
-
-    if (!id) {
-      response.clearCookie("token").status(400).json({
-        message: "No autorizado"
-      })
-    }
-
     try {
+      const id = jwt.verify(cookie, "Secreto", (error, userId) => {
+        if(error) return response.clearCookie("token").status(400).json({
+          message: "No autorizado"
+        })
+        return userId.id
+      })
+
+      if (!id) {
+        response.clearCookie("token").status(400).json({
+          message: "No autorizado"
+        })
+      }
+
       const user = await User.findOne({ where: { id } })
 
       if (!user) return response.status(404).json({
