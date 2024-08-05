@@ -8,7 +8,7 @@ const generate_token = (time) => {
     return code_verify;
 }
 
-export async function formatUser(user) {
+export function formatUser(user) {
     return {
         id: user.id,
         email: user.email,

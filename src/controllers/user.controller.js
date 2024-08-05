@@ -43,16 +43,13 @@ class UserController {
         email,
         password: hashedPassword,
         isNew: true
-      })
+      }, { returning: true })
 
       const token = jwt.sign({ id: createdUser.id }, "Secreto", {
         expiresIn: "1h"
       })
 
-      response.cookie("token", token).json({
-        id: createdUser.id,
-        isNew: true
-      })
+      response.cookie("token", token).json(formatUser(createdUser))
     } catch (error) {
       console.log(error)
     }
@@ -76,7 +73,9 @@ class UserController {
         message: "Usuario no encontrado"
       })
 
-      let formatedUser = await formatUser(user.toJSON())
+      let formatedUser = formatUser(user.toJSON())
+
+      console.log(formatedUser)
 
       return response.status(200).json({
         user: formatedUser
@@ -87,7 +86,7 @@ class UserController {
   }
 
   static async createProfile(request, response) {
-    const { image, name, info, id, type } = request.body
+    const { image, name, info, id } = request.body
 
     try {
       const user = await User.findByPk(id)
@@ -96,13 +95,10 @@ class UserController {
         message: "Usuario no encontrado"
       })
 
-      const buffer = Buffer.from(image, "base64")
-      const blob = new Blob(new Uint8Array(buffer), { type })
-
       const updatedUser = await User.update({
-        image: blob,
+        image,
         name,
-        description: info,
+        description:info,
         isNew: false
       }, { where: { id }, returning: true })
 
