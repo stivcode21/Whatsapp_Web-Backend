@@ -81,6 +81,12 @@ class UserController {
     }
   }
 
+  static async logout(request, response) {
+    const cookie = request.cookies.token
+
+    if(cookie) return response.clearCookie("token").sendStatus(200)
+  }
+
   static async verifyToken(request, response) {
     const cookie = request.cookies.token
 

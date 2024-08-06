@@ -7,6 +7,7 @@ userRouter.post("/register", UserController.register)
 userRouter.get("/verify-token", UserController.verifyToken)
 userRouter.post("/create-profile", UserController.createProfile)
 userRouter.post("/login", UserController.login)
+userRouter.get("/logout", UserController.logout)
 //userRouter.post("/verify", validator_body, verify)
 
 export default userRouter
