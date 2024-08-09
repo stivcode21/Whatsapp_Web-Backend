@@ -95,6 +95,7 @@ class UserController {
         if(error) return response.clearCookie("token").status(400).json({
           message: "No autorizado"
         })
+        
         return userId.id
       })
 
@@ -111,8 +112,6 @@ class UserController {
       })
 
       let formatedUser = formatUser(user.toJSON())
-
-      console.log(formatedUser)
 
       return response.status(200).json({
         user: formatedUser

@@ -1,11 +1,6 @@
 import { DataTypes, Model } from "sequelize"
 import { sequelize } from "../../infrastructure/database/connection.js"
 
-/*const { Chats } = require("./chats.models")
-const { Configuration } = require("./configuration.models")
-const { Account } = require("./account.models")
-const { State } = require("./state.model")*/
-
 class User extends Model {}
 
 User.init({
@@ -56,4 +51,4 @@ User.hasOne(Account)
 //? Relacion de one-to-one con el modelo de Estado 
 User.hasOne(State)*/
 
-export default User 
+export default User
