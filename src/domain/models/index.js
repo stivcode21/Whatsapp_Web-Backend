@@ -1,6 +1,7 @@
 import User from "./user.model.js";
 import Contacts from "./contacts.model.js";
 import Chats from "./chats.models.js";
+import Messages from "./messages.model.js";
 
 User.hasMany(Contacts);
 Contacts.belongsTo(User);
@@ -25,7 +26,26 @@ Chats.belongsTo(User, {
   as: "user2",
 });
 
-export { User, Contacts, Chats };
+User.hasMany(Messages, {
+  foreignKey: "user_id",
+  as: "user_messages",
+});
+
+Chats.hasMany(Messages, {
+  foreignKey: "chat_id",
+  as: "chat_messages",
+});
+
+Messages.belongsTo(User, {
+  foreignKey: "user_id",
+  as: "user_messages",
+});
+Messages.belongsTo(Messages, {
+  foreignKey: "chat_id",
+  as: "chat_messages",
+});
+
+export { User, Contacts, Chats, Messages };
 
 /*
   Model.sync() //Crear la tabla, si ya existe no le hace nada
