@@ -35,7 +35,7 @@ Messages.init(
     },
   },
   {
-    sequelize: connect(),
+    sequelize,
     tableName: "Messages",
     timestamps: false,
   }
