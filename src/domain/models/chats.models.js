@@ -1,13 +1,30 @@
-const { DataTypes, Model } = require("sequelize")
-const { connect } = require("../../infrastructure/database/connection")
-const { User } = require("./user.model")
-const { Messages } = require("./messages.model")
+const { DataTypes, Model } = require("sequelize");
+const { connect } = require("../../infrastructure/database/connection");
 
 class Chats extends Model {}
 
-Chats.init()
-Chats.belongsTo(User)
+Chats.init(
+  {
+    chat_id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    user1_id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+    },
+    user2_id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+    },
+  },
+  {
+    sequelize,
+    modelName: "Chats",
+    tableName: "Chats",
+    timestamps: false,
+  }
+);
 
-Chats.hasMany(Messages)
-
-module.exports = { Chats }
+module.exports = { Chats };
