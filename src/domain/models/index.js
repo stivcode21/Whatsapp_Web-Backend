@@ -25,7 +25,7 @@ Chats.belongsTo(User, {
   as: "user2",
 });
 
-export { User, Contacts };
+export { User, Contacts, Chats };
 
 /*
   Model.sync() //Crear la tabla, si ya existe no le hace nada

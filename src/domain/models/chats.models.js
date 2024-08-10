@@ -1,5 +1,5 @@
-const { DataTypes, Model } = require("sequelize");
-const { connect } = require("../../infrastructure/database/connection");
+import { Model, DataTypes } from "sequelize";
+import { sequelize } from "../../infrastructure/database/connection.js";
 
 class Chats extends Model {}
 
@@ -27,4 +27,4 @@ Chats.init(
   }
 );
 
-module.exports = { Chats };
+export default Chats;
