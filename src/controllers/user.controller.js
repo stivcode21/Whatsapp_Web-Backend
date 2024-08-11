@@ -46,7 +46,7 @@ class UserController {
       }, { returning: true })
 
       const token = jwt.sign({ id: createdUser.id }, "Secreto", {
-        expiresIn: "1h"
+        expiresIn: "1m"
       })
 
       response.cookie("token", token).json(formatUser(createdUser))
