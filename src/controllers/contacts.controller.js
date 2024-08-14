@@ -5,13 +5,14 @@ import { formatUser } from "../helpers/funtctions.js"
 
 class ContactsController {
   static async filter(request, response) {
-    const { email } = request.body
+    const { email, id } = request.body
 
     try {
       const findUsers = await User.findAll({
         attributes: ["id", "email", "name", "image"],
         where: {
-          email: { [Op.startsWith]: email }
+          email: { [Op.startsWith]: email },
+          id: { [Op.ne]: id }
         }
       })
 

@@ -39,7 +39,7 @@ connectDB();
 try {
   await User.sync();
   console.log("Table Users created");
-  await Contacts.sync({ force: true });
+  await Contacts.sync();
   console.log("Table Contacts created");
   await Chats.sync();
   console.log("Table Chats created");
