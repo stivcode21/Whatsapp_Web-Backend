@@ -32,8 +32,6 @@ class ContactsController {
 
       await Contacts.create({
         id: user.id,
-        name: user.name,
-        email: user.email,
         UserId: userId
       })
 

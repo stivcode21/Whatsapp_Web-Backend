@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { formatUser } from '../helpers/funtctions.js'
 import Contacts from '../domain/models/contacts.model.js'
+import { Op, col } from 'sequelize'
 //const { generate_token } = require('../helpers/funtctions')
 
 class UserController {
@@ -77,11 +78,18 @@ class UserController {
           message: 'Usuario o contraseña incorrectos',
         })
 
-      const contacts = await Contacts.findAll({ where: { UserId: user.id } })
-      const imageContact = await User.findOne({
-        attributes: ['image'],
-        where: { id: user.id },
-      })
+        const contacts = await User.findAll({
+          attributes: ['id', 'email', 'name', 'image'],
+          include: [
+            {
+              model: Contacts,
+              required: true, // Esto fuerza el INNER JOIN
+              on: {
+                '$User.id$': { [Op.eq]: col('Contacts.id') },
+              },
+            },
+          ],
+        });
 
       const token = jwt.sign({ id: user.id }, 'Secreto', {
         expiresIn: '1h',
@@ -91,11 +99,8 @@ class UserController {
         .cookie('token', token)
         .status(200)
         .json({
-          user: formatedUser,
-          contacts: {
-            ...contacts,
-            image: imageContact,
-          },
+          user,
+          contacts
         })
     } catch (error) {
       console.log(error)
@@ -133,23 +138,18 @@ class UserController {
           message: 'Usuario no encontrado',
         })
 
-      const contacts = await Contacts.findAll({
-        where: { UserId: user.id },
-        include: [
-          {
-            association: 'User',
-            required: true,
-          },
-        ],
-      })
-      console.log(
-        '=============================== INICIO CONTACTS =============================='
-      )
-      console.log(contacts.toJSON())
-      console.log(contacts.User)
-      console.log(
-        '=============================== FIN CONTACTS =============================='
-      )
+        const contacts = await User.findAll({
+          attributes: ['id', 'email', 'name', 'image'],
+          include: [
+            {
+              model: Contacts,
+              required: true, // Esto fuerza el INNER JOIN
+              on: {
+                '$User.id$': { [Op.eq]: col('Contacts.id') },
+              },
+            },
+          ],
+        });
 
       let formatedUser = formatUser(user.toJSON())
 
