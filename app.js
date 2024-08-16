@@ -5,7 +5,13 @@ import userRouter from "./src/routes/user.routes.js";
 import { PORT } from "./config.js";
 import cookieParser from "cookie-parser";
 
-import { User, Contacts, Chats, Messages } from "./src/domain/models/index.js";
+import {
+  User,
+  Contacts,
+  Chats,
+  Messages,
+  Status,
+} from "./src/domain/models/index.js";
 import contactsRouter from "./src/routes/contacts.routes.js";
 
 const app = express();
@@ -45,6 +51,8 @@ try {
   console.log("Table Chats created");
   await Messages.sync();
   console.log("Table Messages created");
+  await Status.sync();
+  console.log("Table Status Created");
 } catch (error) {
   console.log(error);
 }
