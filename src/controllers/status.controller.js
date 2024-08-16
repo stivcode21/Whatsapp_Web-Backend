@@ -3,7 +3,10 @@ import { Status } from "../domain/models/index.js";
 class newStatus {
   constructor(id) {
     this.id = id;
-    /*PARA PROBAR  */
+    /*PARA PROBAR, COLOQUE 10000MS PARA QUE SE ELIMINE EN 10 SEGUNDOS
+    PARA QUE SEAN 24 HORAS, USAR 86400000 MS
+    */
+
     setTimeout(() => this.deleteStatus24H(), 10000);
   }
   async deleteStatus24H() {
