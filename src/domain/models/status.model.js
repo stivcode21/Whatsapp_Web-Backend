@@ -32,6 +32,7 @@ Status.init(
     sequelize,
     modelName: "Status",
     tableName: "Status",
+    timestamps: false,
   }
 );
 
