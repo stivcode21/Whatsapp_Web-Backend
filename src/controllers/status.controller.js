@@ -54,6 +54,22 @@ class StatusController {
     }
   }
 
+  static async showOneStatus(req, res) {
+    const { user_id, status_id } = req.params;
+    try {
+      const result = await Status.findOne({
+        attributes: ["description", "multimedia"],
+        where: {
+          user_id,
+          status_id,
+        },
+      });
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json({ name: error.name, message: error.message });
+    }
+  }
+
   static async deleteStatusManually(req, res) {
     const { user_id, status_id } = req.params;
     try {

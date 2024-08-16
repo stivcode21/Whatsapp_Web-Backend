@@ -3,6 +3,7 @@ import { Router } from "express";
 const statusRouter = Router();
 
 statusRouter.get("/:user_id", StatusController.showAllStatus);
+statusRouter.get("/:user_id/:status_id", StatusController.showOneStatus);
 statusRouter.post("/:user_id/add", StatusController.addNewStatus);
 statusRouter.delete(
   "/:user_id/delete/:status_id",
