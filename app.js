@@ -12,7 +12,9 @@ import {
   Messages,
   Status,
 } from "./src/domain/models/index.js";
+
 import contactsRouter from "./src/routes/contacts.routes.js";
+import statusRouter from "./src/routes/status.routes.js";
 
 const app = express();
 
@@ -37,6 +39,7 @@ app.use(cookieParser());
 
 app.use("/user", userRouter);
 app.use("/contacts", contactsRouter);
+app.use("/status", statusRouter);
 
 // DataBase
 
