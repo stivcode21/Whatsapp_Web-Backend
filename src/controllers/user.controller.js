@@ -51,12 +51,14 @@ class UserController {
       )
 
       const token = jwt.sign({ id: createdUser.id }, 'Secreto', {
-        expiresIn: '1m',
+        expiresIn: '1h',
       })
 
-      response.cookie('token', token).json(formatUser(createdUser))
+      response.cookie('token', token).json({
+        user: formatUser(createdUser),
+      })
     } catch (error) {
-      console.log(error)
+      console.log(error.message)
     }
   }
 
@@ -78,30 +80,41 @@ class UserController {
           message: 'Usuario o contraseña incorrectos',
         })
 
-        const contacts = await User.findAll({
-          attributes: ['id', 'email', 'name', 'image'],
-          include: [
-            {
-              model: Contacts,
-              required: true, // Esto fuerza el INNER JOIN
-              on: {
-                '$User.id$': { [Op.eq]: col('Contacts.id') },
-              },
+      // const contacts = await User.findAll({
+      //   attributes: ['id', 'email', 'name', 'image'],
+      //   include: [
+      //     {
+      //       model: Contacts,
+      //       required: true, // Esto fuerza el INNER JOIN
+      //       on: {
+      //         '$User.id$': { [Op.eq]: col('Contacts.id') },
+      //       },
+      //     },
+      //   ],
+      // })
+      const contacts = await User.findAll({
+        attributes: ['id', 'email', 'name', 'image'],
+        include: [
+          {
+            model: Contacts,
+            required: false, // Esto fuerza el INNER JOIN
+            where: {
+              "$User.id$": { [Op.eq]: col("Contacts.id") }, // Esto asegura que solo se incluyan contactos del usuario autenticado
             },
-          ],
-        });
+          },
+        ],
+      })
+
+      console.log(contacts)
 
       const token = jwt.sign({ id: user.id }, 'Secreto', {
         expiresIn: '1h',
       })
 
-      response
-        .cookie('token', token)
-        .status(200)
-        .json({
-          user,
-          contacts
-        })
+      response.cookie('token', token).status(200).json({
+        user,
+        contacts,
+      })
     } catch (error) {
       console.log(error)
     }
@@ -131,6 +144,7 @@ class UserController {
           message: 'No autorizado',
         })
       }
+
       const user = await User.findOne({ where: { id } })
 
       if (!user)
@@ -138,24 +152,41 @@ class UserController {
           message: 'Usuario no encontrado',
         })
 
-        const contacts = await User.findAll({
-          attributes: ['id', 'email', 'name', 'image'],
-          include: [
-            {
-              model: Contacts,
-              required: true, // Esto fuerza el INNER JOIN
-              on: {
-                '$User.id$': { [Op.eq]: col('Contacts.id') },
-              },
+      console.log(user.id)
+
+      /*const contacts = await User.findAll({
+        attributes: ['id', 'email', 'name', 'image'],
+        include: [
+          {
+            model: Contacts,
+            required: true, // Esto fuerza el INNER JOIN
+            on: {
+              '$User.id$': { [Op.eq]: col('Contacts.id') },
             },
-          ],
-        });
+          },
+        ],
+      })*/
+
+      const contacts = await User.findAll({
+        attributes: ['id', 'email', 'name', 'image'],
+        include: [
+          {
+            model: Contacts,
+            required: true, // Esto fuerza el INNER JOIN
+            where: {
+              UserId: user.id, // Esto asegura que solo se incluyan contactos del usuario autenticado
+            },
+          },
+        ],
+      })
+
+      console.log(contacts)
 
       let formatedUser = formatUser(user.toJSON())
 
       return response.status(200).json({
         user: formatedUser,
-        contacts
+        contacts,
       })
     } catch (error) {
       console.log(error)
@@ -180,10 +211,19 @@ class UserController {
           description: info,
           isNew: false,
         },
-        { where: { id }, returning: true }
+        { where: { id } }
       )
 
-      return response.status(200).json(formatUser(updatedUser[1][0]))
+      return response.status(200).json({
+        user: {
+          id: user.id,
+          email: user.email,
+          name,
+          image,
+          description: info,
+          isNew: false,
+        },
+      })
     } catch (error) {
       console.log(error)
     }
